@@ -51,8 +51,10 @@ def _bench(
         if hook:
             hook()
 
-        start_time = perf_counter()
         if first_move:
+            sem0.acquire()
+            sem1.release()
+        else:
             sem1.release()
         start_time = perf_counter()
         for _ in range(loop):
@@ -62,7 +64,7 @@ def _bench(
 
 
 def main() -> None:
-    loop = 10000
+    loop = 1000
 
     for label, context in (
         ("POSIX", PosixSemaphoreContext),
